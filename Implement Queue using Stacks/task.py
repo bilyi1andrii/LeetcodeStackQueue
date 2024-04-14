@@ -1,28 +1,38 @@
-from collections import deque
-
 class MyQueue:
 
-    def __init__(self):
-        self.line = deque()
+    def __init__(self, data = None):
+        self.data = data
+        self.next = None
 
     def push(self, x: int) -> None:
-        self.line.appendleft(x)
+        if self.data is None:
+            self.data = x
+        else:
+            current = self
+            while current.next:
+                current = current.next
+            current.next = MyQueue(x)
+
 
 
     def pop(self) -> int:
-        return self.line.pop()
+        desired = self.data
+        new_head = self.next
+        if new_head is None:
+            self.data = None
+            self.next = None
+        else:
+            self.data = new_head.data
+            self.next = new_head.next
+        return desired
 
 
     def peek(self) -> int:
-        index = 0
-        for elm in self.line:
-            if index == len(self.line) - 1:
-                return elm
-            index += 1
+        return self.data
 
 
     def empty(self) -> bool:
-        if not self.line:
+        if self.data is None:
             return True
         return False
 
