@@ -40,7 +40,7 @@ class Queue:
 
 class MyStack:
 
-    def __init__(self, data = None):
+    def __init__(self):
         self.main = Queue()
         self.sub = Queue()
 
