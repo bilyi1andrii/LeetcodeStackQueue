@@ -1,46 +1,68 @@
-class MyStack:
-
-    def __init__(self, data = None):
+class Node:
+    def __init__(self, data):
         self.data = data
         self.next = None
 
+class Queue:
+    def __init__(self):
+        self.head = None
+        self.tail = None
 
-    def push(self, x: int) -> None:
-        if self.data is None:
-            self.data = x
+    def push(self, x: int):
+        if self.head is None:
+            self.head = Node(x)
+            self.tail = self.head
         else:
-            current = self
+            current = self.head
             while current.next:
                 current = current.next
-            current.next = MyStack(x)
+            current.next = Node(x)
+            self.tail = current.next
+
+    def peek(self):
+        return self.head.data
+
+    def pop(self):
+        desired = self.head.data
+        new_head = self.head.next
+        if new_head is None:
+            self.head = None
+            self.tail = None
+        else:
+            self.head.data = new_head.data
+            self.head.next = new_head.next
+        return desired
+
+    def empty(self):
+        if self.head is None:
+            return True
+        return False
+
+class MyStack:
+
+    def __init__(self, data = None):
+        self.main = Queue()
+        self.sub = Queue()
+
+
+    def push(self, x: int) -> None:
+        while not self.main.empty():
+            self.sub.push(self.main.pop())
+        self.main.push(x)
+        while not self.sub.empty():
+            self.main.push(self.sub.pop())
 
 
     def pop(self) -> int:
-        current = self
-        if current.next is None:
-            desired = self.data
-            self.data = None
-            self.next = None
-            return desired
-
-        while current.next.next:
-            current = current.next
-        desired = current.next.data
-        current.next = None
-        return desired
+        return self.main.pop()
 
 
     def top(self) -> int:
-        current = self
-        while current.next:
-            current = current.next
-        return current.data
+        return self.main.peek()
 
 
     def empty(self) -> bool:
-        if self.data is None:
-            return True
-        return False
+        return self.main.empty()
 
 
 
